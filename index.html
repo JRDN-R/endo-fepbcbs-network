@@ -251,6 +251,8 @@
             margin-top: 12px;
             font-size: 14px;
             color: var(--text-secondary);
+            list-style: none;
+            padding: 0;
         }
 
         .other-locations li {
@@ -291,7 +293,7 @@
             <div class="section-title">Background & Conflict History</div>
             <div class="info-block" style="border-left: 4px solid var(--accent-green);">
                 <span class="badge" style="margin: 0 0 8px 0;" id="modalStatus">Clean Record</span>
-                <div id="modalHistory">No disciplinary actions.</div>
+                <div id="modalHistory" style="margin-top:8px;">No disciplinary actions.</div>
             </div>
 
             <div class="section-title">Reputation & Reviews</div>
@@ -326,8 +328,8 @@
 </div>
 
 <script>
-    // Database of Providers based on research
-    const providers =[
+    // Database of Providers with all fields correctly populated
+    const providers = [
         {
             id: 1,
             name: "Jose Luis Marcos Arenal, DDS",
@@ -340,7 +342,23 @@
             ratingSource: "WebMD & DentaQual",
             reviewNotes: "Patients highlight high professionalism and transparency with budgets.",
             history: "No disciplinary actions or malpractice suits. Positive history of expanding accessibility to specialist care.",
-            otherLocs:
+            otherLocs: [
+                "5116 Blanding Blvd, Jacksonville, FL 32210",
+                "1562 Wells Rd Ste 16, Orange Park, FL 32073",
+                "1036 Dunn Ave Ste 42, Jacksonville, FL 32218",
+                "5937 University Blvd W, Jacksonville, FL 32216",
+                "10601 San Jose Blvd Ste 117, Jacksonville, FL 32257",
+                "620 Commerce Center Dr Unit 155, Jacksonville, FL 32225",
+                "9978 Old Baymeadows Rd Ste 1, Jacksonville, FL 32256",
+                "1985 Eastwest Pkwy, Fleming Island, FL 32003",
+                "540 State Road 13 N Ste 101, Fruit Cove, FL 32259",
+                "13820 Old Saint Augustine Rd Ste 105, Jacksonville, FL 32258",
+                "14444 Beach Blvd Ste 2, Jacksonville, FL 32250",
+                "1023 Atlantic Blvd, Atlantic Beach, FL 32233",
+                "3727 N Goldenrod Rd Ste 108, Winter Park, FL 32792",
+                "4732 S Kirkman Rd, Orlando, FL 32811",
+                "1379 E Vine St, Kissimmee, FL 34744"
+            ]
         },
         {
             id: 2,
@@ -354,7 +372,9 @@
             ratingSource: "Healthgrades & RateMDs",
             reviewNotes: "Consistently praised for highly knowledgeable, painless root canals.",
             history: "Zero malpractice or board infractions. Exceptionally positive history in academic dentistry and research.",
-            otherLocs:
+            otherLocs: [
+                "960185 Gateway Blvd Ste 204, Fernandina Beach, FL 32034"
+            ]
         },
         {
             id: 3,
@@ -368,7 +388,9 @@
             ratingSource: "Sharecare",
             reviewNotes: "Smaller digital footprint. Clinic praised for comfortable and respectful environment.",
             history: "Pristine public record. Elite top-tier academic background with no board actions or malpractice lawsuits.",
-            otherLocs:
+            otherLocs: [
+                "960185 Gateway Blvd Ste 204, Fernandina Beach, FL 32034"
+            ]
         },
         {
             id: 4,
@@ -382,7 +404,11 @@
             ratingSource: "WebMD & Vitals",
             reviewNotes: "Described as 'very knowledgeable' with a focus on painless dentistry and compassionate care.",
             history: "Clean license. Strong positive compliance history across several different state dental boards.",
-            otherLocs:
+            otherLocs: [
+                "9109 Baymeadows Rd Ste 1, Jacksonville, FL 32256",
+                "548 W Twincourt Trl, Saint Augustine, FL 32095",
+                "1031 Weiss Ave Ste 101, Fayetteville, NC 28305"
+            ]
         },
         {
             id: 5,
@@ -396,7 +422,19 @@
             ratingSource: "Aspen Clinic Averages",
             reviewNotes: "Praised for promptness of care and efficient handling of emergency root canals.",
             history: "Zero board infractions, sanctions, or malpractice lawsuits found on public record.",
-            otherLocs:
+            otherLocs: [
+                "651 Nautica Dr Ste 1, Jacksonville, FL 32218",
+                "4520 Town Center Pkwy Unit 103, Jacksonville, FL 32246",
+                "9920 Southside Blvd, Jacksonville, FL 32256",
+                "11806 Atlantic Blvd Ste 4, Jacksonville, FL 32225",
+                "200 Bartram Market Dr, Saint Johns, FL 32259",
+                "463859 State Road 200, Yulee, FL 32097",
+                "1747 US Highway 1 S, St Augustine, FL 32084",
+                "321 N State Road 19, Palatka, FL 32177",
+                "2143 W US Hwy 90 Ste A, Lake City, FL 32055",
+                "4873 Belle Terre Pkwy, Palm Coast, FL 32137",
+                "1298 W Granada Blvd, Ormond Beach, FL 32174"
+            ]
         },
         {
             id: 6,
@@ -410,7 +448,25 @@
             ratingSource: "DentaQual",
             reviewNotes: "Praised for using advanced surgical microscopes and 3D CBCT imaging. Fluent in English & Spanish.",
             history: "No board conflict history. Strong positive history of academic excellence. Active AAE member.",
-            otherLocs:
+            otherLocs: [
+                "4316 Southside Blvd, Jacksonville, FL 32216",
+                "2709 Monument Rd, Jacksonville, FL 32225",
+                "911 Beville Rd Ste 2, South Daytona, FL 32119",
+                "17365 US Highway 441, Mount Dora, FL 32757",
+                "3779 Lake Emma Rd, Lake Mary, FL 32746",
+                "5908 Red Bug Lake Rd, Winter Springs, FL 32708",
+                "1973 Aloma Ave, Winter Park, FL 32792",
+                "11050 W Colonial Dr Ste 30, Ocoee, FL 34761",
+                "4014 Winter Garden Vineland Rd Ste B, Winter Garden, FL 34787",
+                "3123 S Orange Ave Ste 107, Orlando, FL 32806",
+                "12711 Narcoossee Rd Ste 100 Bldg B, Orlando, FL 32832",
+                "2907 Vineland Rd, Kissimmee, FL 34746",
+                "4396 W Vine St, Kissimmee, FL 34746",
+                "2942 N Orange Blossom Trl, Kissimmee, FL 34744",
+                "6455 N Wickham Rd Ste 103, Melbourne, FL 32940",
+                "1820 58Th Ave Ste 101, Vero Beach, FL 32966",
+                "5966 S Dixie Hwy Ste 312, South Miami, FL 33143"
+            ]
         },
         {
             id: 7,
@@ -424,7 +480,29 @@
             ratingSource: "Healthgrades & DentaQual",
             reviewNotes: "Known for her 'stress-free endodontics' philosophy and strong focus on patient anxiety management.",
             history: "Clean professional record. Active member of FL Dental Association and South Broward Dental Society.",
-            otherLocs:
+            otherLocs: [
+                "2709 Monument Rd, Jacksonville, FL 32225",
+                "501 Maitland Blvd, Maitland, FL 32751",
+                "7601 Narcoossee Rd, Orlando, FL 32822",
+                "4396 W Vine St, Kissimmee, FL 34746",
+                "2942 N Orange Blossom Trl, Kissimmee, FL 34744",
+                "6455 N Wickham Rd Ste 103, Melbourne, FL 32940",
+                "11151 Southern Blvd Ste 110, Royal Palm Beach, FL 33411",
+                "7375 Boynton Beach Blvd Ste 445 Bldg D, Boynton Beach, FL 33437",
+                "5810 Wiles Rd, Coral Springs, FL 33067",
+                "1865 Cordova Rd, Fort Lauderdale, FL 33316",
+                "18312 Pines Blvd, Pembroke Pnes, FL 33029",
+                "420 Town Center Parkway, Slidell, LA 70458",
+                "3421 East Causeway Approach Ste A, Mandeville, LA 70448",
+                "929 Manhattan Boulevard Ste D, Harvey, LA 70058",
+                "2937 Veterans Memorial Boulevard Ste C, Metairie, LA 70002",
+                "5201 Veterans Memorial Boulevard Ste A, Metairie, LA 70006",
+                "10129 Crossing Way Ste 400, Denham Springs, LA 70726",
+                "2121 Millerville Road Ste A, Baton Rouge, LA 70816",
+                "3535 Perkins Rd Ste 345, Baton Rouge, LA 70808",
+                "4243 Ambassador Caffery Parkway Ste 118, Lafayette, LA 70508",
+                "4750 Nelson Road Ste 100, Lake Charles, LA 70605"
+            ]
         },
         {
             id: 8,
@@ -438,7 +516,9 @@
             ratingSource: "General Average",
             reviewNotes: "Fewer numeric reviews due to recency in field, but holds highest clinical distinction (Diplomate of ABE).",
             history: "Clean background. Rapidly achieving Board Certification is a major positive achievement.",
-            otherLocs:
+            otherLocs: [
+                "1747 US Highway 1 S, St Augustine, FL 32084"
+            ]
         }
     ];
 
@@ -471,7 +551,7 @@
         // Populate Data
         document.getElementById('modalName').innerText = doctor.name;
         document.getElementById('modalPhone').href = `tel:${doctor.phone.replace(/-/g, '')}`;
-        document.getElementById('modalPhone').innerText = `📞 Call ${doctor.phone}`;
+        document.getElementById('modalPhone').innerText = `📞 Call Main Office: ${doctor.phone}`;
         
         document.getElementById('modalStatus').innerText = doctor.badge;
         document.getElementById('modalHistory').innerText = doctor.history;
@@ -487,9 +567,9 @@
         // Handle Other Locations List
         const otherLocsContainer = document.getElementById('modalOtherLocs');
         const otherLocsTitle = document.getElementById('otherLocTitle');
-        otherLocsContainer.innerHTML = '';
+        otherLocsContainer.innerHTML = ''; // Clear previous items
         
-        if(doctor.otherLocs.length > 0) {
+        if (doctor.otherLocs && doctor.otherLocs.length > 0) {
             otherLocsTitle.style.display = 'block';
             doctor.otherLocs.forEach(loc => {
                 const li = document.createElement('li');
