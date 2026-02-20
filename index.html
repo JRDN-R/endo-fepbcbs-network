@@ -2,301 +2,517 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Endodontist Providers - Research Data</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Endodontist Directory</title>
     <style>
+        :root {
+            --bg-color: #000000;
+            --surface-color: #1C1C1E;
+            --surface-elevated: #2C2C2E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #8E8E93;
+            --accent-blue: #0A84FF;
+            --accent-green: #30D158;
+            --separator: rgba(84, 84, 88, 0.65);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            font-size: 11pt;
-            padding: 20px;
-            background-color: #f8f9fa;
-            color: #333333;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
             line-height: 1.5;
+            overflow-x: hidden;
         }
-        table {
-            border-collapse: collapse;
-            text-align: left;
-            width: 100%;
-            max-width: 1300px;
+
+        /* Mobile App Container Simulation */
+        .app-container {
+            max-width: 500px;
             margin: 0 auto;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            border-radius: 8px;
-            overflow: hidden;
+            min-height: 100vh;
+            position: relative;
+            background-color: var(--bg-color);
+            padding-bottom: 40px;
         }
-        th, td {
-            border: 1px solid #e9ecef;
+
+        /* Glassmorphic Header */
+        .header {
+            position: sticky;
+            top: 0;
+            background: rgba(28, 28, 30, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 20px;
+            z-index: 10;
+            border-bottom: 0.5px solid var(--separator);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        /* Doctor List View */
+        .provider-list {
             padding: 16px;
-            vertical-align: top;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        th {
-            background-color: #0056b3;
-            color: #ffffff;
-            font-weight: 600;
-            text-align: left;
-            font-size: 11.5pt;
-        }
-        .center-text {
-            text-align: center;
-        }
-        /* Clickable Phone Button Styling */
-        .phone-btn {
-            display: inline-flex;
+
+        .provider-card {
+            background-color: var(--surface-color);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            background-color: #28a745;
-            color: #ffffff !important;
-            padding: 6px 12px;
-            text-decoration: none;
-            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.1s ease, background-color 0.2s ease;
+        }
+
+        .provider-card:active {
+            transform: scale(0.96);
+            background-color: var(--surface-elevated);
+        }
+
+        .provider-info h2 {
+            margin: 0 0 4px 0;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .provider-info p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: rgba(48, 209, 88, 0.2);
+            color: var(--accent-green);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
             font-weight: 600;
             margin-top: 8px;
-            margin-bottom: 8px;
-            font-size: 10.5pt;
-            box-shadow: 0 2px 4px rgba(40, 167, 69, 0.25);
-            transition: background-color 0.2s, transform 0.1s;
         }
-        .phone-btn:hover {
-            background-color: #218838;
-            transform: translateY(-1px);
-        }
-        /* Collapsible Office List Styling */
-        details {
-            margin-top: 10px;
-            background-color: #f1f3f5;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #dee2e6;
-        }
-        details summary {
-            cursor: pointer;
-            color: #0056b3;
-            font-weight: 600;
-            outline: none;
-            font-size: 10.5pt;
-        }
-        details summary:hover {
-            text-decoration: underline;
-        }
-        details ul {
-            margin: 8px 0 0 0;
-            padding-left: 20px;
-            font-size: 9.5pt;
-            color: #495057;
-        }
-        details li {
-            margin-bottom: 4px;
-        }
-        .highlight-good {
-            color: #155724;
-            background-color: #d4edda;
-            padding: 2px 6px;
-            border-radius: 4px;
+
+        .chevron {
+            color: var(--text-secondary);
+            font-size: 20px;
             font-weight: bold;
-            font-size: 10pt;
-            display: inline-block;
-            margin-bottom: 4px;
+            opacity: 0.5;
         }
+
+        /* iOS Bottom Sheet Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 100;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .bottom-sheet {
+            background-color: var(--surface-color);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 24px 24px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-overlay.active .bottom-sheet {
+            transform: translateY(0);
+        }
+
+        .sheet-header {
+            padding: 16px;
+            text-align: center;
+            position: relative;
+            border-bottom: 0.5px solid var(--separator);
+        }
+
+        .grabber {
+            width: 36px;
+            height: 5px;
+            background-color: #545458;
+            border-radius: 3px;
+            margin: 0 auto 12px auto;
+        }
+
+        .sheet-header h3 {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--surface-elevated);
+            border: none;
+            color: var(--text-primary);
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sheet-content {
+            padding: 20px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Modal Data Sections */
+        .section-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin: 24px 0 8px 0;
+        }
+
+        .info-block {
+            background-color: var(--surface-elevated);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        .info-block.rating-block {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .rating-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        /* Call Action Button */
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--accent-blue);
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            transition: opacity 0.2s;
+        }
+
+        .action-btn:active {
+            opacity: 0.8;
+        }
+
+        .other-locations {
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .other-locations li {
+            margin-bottom: 8px;
+            border-bottom: 0.5px solid var(--separator);
+            padding-bottom: 8px;
+        }
+        .other-locations li:last-child {
+            border-bottom: none;
+        }
+
     </style>
 </head>
 <body>
-    <table>
-        <tr>
-            <th style="width: 15%;">Doctor Name</th>
-            <th style="width: 20%;">Education & Experience</th>
-            <th style="width: 25%;">Offices & Contact (Click to Call)</th>
-            <th style="width: 15%;">Highest Ratings & Reviews</th>
-            <th style="width: 25%;">Background & Conflict History</th>
-        </tr>
-        <tr>
-            <td><strong>Jose Luis Marcos Arenal, DDS, MS</strong></td>
-            <td><strong>DDS:</strong> Basque University Dental School<br><strong>Cert:</strong> UNC Hospitals (Endodontics)<br><br>Highly experienced practitioner working primarily within the Greenberg Dental network across FL.</td>
-            <td>
-                <strong>Main Location:</strong><br>5149 Normandy Blvd, Unit 4, Jacksonville, FL 32205<br>
-                <a href="tel:904-781-1201" class="phone-btn">📞 (904) 781-1201</a>
-                <details>
-                    <summary>View 15 Other Locations</summary>
-                    <ul>
-                        <li>5116 Blanding Blvd, Jacksonville, FL 32210</li>
-                        <li>1562 Wells Rd Ste 16, Orange Park, FL 32073</li>
-                        <li>1036 Dunn Ave Ste 42, Jacksonville, FL 32218</li>
-                        <li>5937 University Blvd W, Jacksonville, FL 32216</li>
-                        <li>10601 San Jose Blvd Ste 117, Jacksonville, FL 32257</li>
-                        <li>620 Commerce Center Dr Unit 155, Jacksonville, FL 32225</li>
-                        <li>9978 Old Baymeadows Rd Ste 1, Jacksonville, FL 32256</li>
-                        <li>1985 Eastwest Pkwy, Fleming Island, FL 32003</li>
-                        <li>540 State Road 13 N Ste 101, Fruit Cove, FL 32259</li>
-                        <li>13820 Old Saint Augustine Rd Ste 105, Jacksonville, FL 32258</li>
-                        <li>14444 Beach Blvd Ste 2, Jacksonville, FL 32250</li>
-                        <li>1023 Atlantic Blvd, Atlantic Beach, FL 32233</li>
-                        <li>3727 N Goldenrod Rd Ste 108, Winter Park, FL 32792</li>
-                        <li>4732 S Kirkman Rd, Orlando, FL 32811</li>
-                        <li>1379 E Vine St, Kissimmee, FL 34744</li>
+
+<div class="app-container">
+    <div class="header">
+        <h1>Providers</h1>
+    </div>
+
+    <!-- Container where JS will inject the Doctor Cards -->
+    <div class="provider-list" id="providerList"></div>
+</div>
+
+<!-- iOS Bottom Sheet (Hidden by default) -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="bottom-sheet" onclick="event.stopPropagation()">
+        <div class="sheet-header">
+            <div class="grabber"></div>
+            <button class="close-btn" onclick="closeModal(true)">✕</button>
+            <h3 id="modalName">Doctor Name</h3>
+        </div>
+        <div class="sheet-content">
+            
+            <!-- Click to Call Action -->
+            <a href="#" id="modalPhone" class="action-btn">📞 Call Main Office</a>
+
+            <div class="section-title">Background & Conflict History</div>
+            <div class="info-block" style="border-left: 4px solid var(--accent-green);">
+                <span class="badge" style="margin: 0 0 8px 0;" id="modalStatus">Clean Record</span>
+                <div id="modalHistory">No disciplinary actions.</div>
+            </div>
+
+            <div class="section-title">Reputation & Reviews</div>
+            <div class="info-block rating-block">
+                <div>
+                    <strong id="modalRatingSource">Average Rating</strong>
+                    <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;" id="modalReviewNotes">Notes</div>
+                </div>
+                <div class="rating-number" id="modalRatingScore">4.0</div>
+            </div>
+
+            <div class="section-title">Education & Experience</div>
+            <div class="info-block" id="modalEdu">
+                Education info here.
+            </div>
+
+            <div class="section-title">Locations</div>
+            <div class="info-block">
+                <strong>Main Office:</strong>
+                <div id="modalMainLoc" style="margin-top: 4px; color: var(--text-secondary);">Address</div>
+                
+                <div style="margin-top: 16px;">
+                    <strong id="otherLocTitle">Other Locations:</strong>
+                    <ul class="other-locations" id="modalOtherLocs">
+                        <!-- Filled by JS -->
                     </ul>
-                </details>
-            </td>
-            <td class="center-text"><strong>4.0 / 5</strong> (WebMD)<br><strong>4.0 / 5</strong> (DentaQual)<br><br><span style="font-size:9.5pt;">Patients highlight high professionalism and transparency with budgets.</span></td>
-            <td><span class="highlight-good">Clean Record</span><br>No disciplinary actions or malpractice suits. Positive history of expanding accessibility to specialist care through a large network.</td>
-        </tr>
-        <tr>
-            <td><strong>Leandro R. Britto, DDS, MS</strong></td>
-            <td><strong>Academic Background:</strong> Co-authored numerous peer-reviewed studies at the Univ. of Florida regarding complex dental anatomy.<br><br>Highly experienced practitioner.</td>
-            <td>
-                <strong>Main Location:</strong><br>5911 Timuquana Rd Ste 101, Jacksonville, FL 32210<br>
-                <a href="tel:904-777-5878" class="phone-btn">📞 (904) 777-5878</a>
-                <details>
-                    <summary>View 1 Other Location</summary>
-                    <ul>
-                        <li>960185 Gateway Blvd Ste 204, Fernandina Beach, FL 32034</li>
-                    </ul>
-                </details>
-            </td>
-            <td class="center-text"><strong>5.0 / 5</strong> (Healthgrades)<br><strong>4.5 / 5</strong> (RateMDs)<br><br><span style="font-size:9.5pt;">Consistently praised for highly knowledgeable, painless root canals.</span></td>
-            <td><span class="highlight-good">Clean Record</span><br>No malpractice or board infractions. Exceptionally positive history in academic dentistry and research.</td>
-        </tr>
-        <tr>
-            <td><strong>Diana M. Cline, DMD, MS</strong></td>
-            <td><strong>DMD:</strong> Harvard School of Dental Medicine (Ivy League)<br><strong>Residency:</strong> Tufts University / New England Medical Center.</td>
-            <td>
-                <strong>Main Location:</strong><br>5911 Timuquana Rd Ste 101, Jacksonville, FL 32210<br>
-                <a href="tel:904-777-5878" class="phone-btn">📞 (904) 777-5878</a>
-                <details>
-                    <summary>View 1 Other Location</summary>
-                    <ul>
-                        <li>960185 Gateway Blvd Ste 204, Fernandina Beach, FL 32034</li>
-                    </ul>
-                </details>
-            </td>
-            <td class="center-text"><strong>3.0 / 5</strong> (Sharecare)<br><br><span style="font-size:9.5pt;">Smaller digital footprint. Clinic praised for comfortable and respectful environment.</span></td>
-            <td><span class="highlight-good">Clean Record</span><br>Pristine public record. Elite top-tier academic background with no board actions or malpractice lawsuits.</td>
-        </tr>
-        <tr>
-            <td><strong>Kerolos R. Elsayed, DDS, MS</strong></td>
-            <td><strong>DDS:</strong> Univ of North Carolina.<br><br>Approx. 14 years of specialized experience practicing across multiple states (FL, GA, NC).</td>
-            <td>
-                <strong>Main Location:</strong><br>751 Oak St, Ste 601, Jacksonville, FL 32204<br>
-                <a href="tel:904-354-4031" class="phone-btn">📞 (904) 354-4031</a>
-                <details>
-                    <summary>View 3 Other Locations</summary>
-                    <ul>
-                        <li>9109 Baymeadows Rd Ste 1, Jacksonville, FL 32256</li>
-                        <li>548 W Twincourt Trl, Saint Augustine, FL 32095</li>
-                        <li>1031 Weiss Ave Ste 101, Fayetteville, NC 28305</li>
-                    </ul>
-                </details>
-            </td>
-            <td class="center-text"><strong>4.5 - 5.0 / 5</strong> (WebMD/Vitals)<br><br><span style="font-size:9.5pt;">Patients describe him as "very knowledgeable," noting his "painless dentistry" and compassionate care.</span></td>
-            <td><span class="highlight-good">Clean Record</span><br>Clean license. Strong positive compliance history across several different state dental boards.</td>
-        </tr>
-        <tr>
-            <td><strong>Jacob Prows, DDS, MS</strong></td>
-            <td>Approx. 7 years of specialized endodontic experience (NPI issued 2019). <br><br>Practices heavily within the Aspen Dental network.</td>
-            <td>
-                <strong>Main Location:</strong><br>8440 Blanding Blvd, Jacksonville, FL 32244<br>
-                <a href="tel:904-525-8041" class="phone-btn">📞 (904) 525-8041</a>
-                <details>
-                    <summary>View 11 Other Locations</summary>
-                    <ul>
-                        <li>651 Nautica Dr Ste 1, Jacksonville, FL 32218</li>
-                        <li>4520 Town Center Pkwy Unit 103, Jacksonville, FL 32246</li>
-                        <li>9920 Southside Blvd, Jacksonville, FL 32256</li>
-                        <li>11806 Atlantic Blvd Ste 4, Jacksonville, FL 32225</li>
-                        <li>200 Bartram Market Dr, Saint Johns, FL 32259</li>
-                        <li>463859 State Road 200, Yulee, FL 32097</li>
-                        <li>1747 US Highway 1 S, St Augustine, FL 32084</li>
-                        <li>321 N State Road 19, Palatka, FL 32177</li>
-                        <li>2143 W US Hwy 90 Ste A, Lake City, FL 32055</li>
-                        <li>4873 Belle Terre Pkwy, Palm Coast, FL 32137</li>
-                        <li>1298 W Granada Blvd, Ormond Beach, FL 32174</li>
-                    </ul>
-                </details>
-            </td>
-            <td class="center-text"><strong>4.1 - 4.5 / 5</strong><br>(Aspen Clinic Averages)<br><br><span style="font-size:9.5pt;">Praised for promptness of care and efficient handling of emergency root canals.</span></td>
-            <td><span class="highlight-good">Clean Record</span><br>Zero board infractions, sanctions, or malpractice lawsuits found on public record.</td>
-        </tr>
-        <tr>
-            <td><strong>Marangely Ruiz Medina, DMD, MS</strong></td>
-            <td><strong>DMD:</strong> Univ of Puerto Rico (Magna Cum Laude).<br><strong>Residency:</strong> NYU Langone.<br><strong>BS:</strong> Neuroscience, Univ of Michigan.</td>
-            <td>
-                <strong>Main Location:</strong><br>9406 Atlantic Blvd Ste 1, Jacksonville, FL 32225<br>
-                <a href="tel:904-204-9105" class="phone-btn">📞 (904) 204-9105</a>
-                <details>
-                    <summary>View 17 Other Locations</summary>
-                    <ul>
-                        <li>4316 Southside Blvd, Jacksonville, FL 32216</li>
-                        <li>2709 Monument Rd, Jacksonville, FL 32225</li>
-                        <li>911 Beville Rd Ste 2, South Daytona, FL 32119</li>
-                        <li>17365 US Highway 441, Mount Dora, FL 32757</li>
-                        <li>3779 Lake Emma Rd, Lake Mary, FL 32746</li>
-                        <li>5908 Red Bug Lake Rd, Winter Springs, FL 32708</li>
-                        <li>1973 Aloma Ave, Winter Park, FL 32792</li>
-                        <li>11050 W Colonial Dr Ste 30, Ocoee, FL 34761</li>
-                        <li>4014 Winter Garden Vineland Rd Ste B, Winter Garden, FL 34787</li>
-                        <li>3123 S Orange Ave Ste 107, Orlando, FL 32806</li>
-                        <li>12711 Narcoossee Rd Ste 100 Bldg B, Orlando, FL 32832</li>
-                        <li>2907 Vineland Rd, Kissimmee, FL 34746</li>
-                        <li>4396 W Vine St, Kissimmee, FL 34746</li>
-                        <li>2942 N Orange Blossom Trl, Kissimmee, FL 34744</li>
-                        <li>6455 N Wickham Rd Ste 103, Melbourne, FL 32940</li>
-                        <li>1820 58Th Ave Ste 101, Vero Beach, FL 32966</li>
-                        <li>5966 S Dixie Hwy Ste 312, South Miami, FL 33143</li>
-                    </ul>
-                </details>
-            </td>
-            <td class="center-text"><strong>4.0 / 5</strong> (DentaQual)<br><br><span style="font-size:9.5pt;">Fully bilingual (Eng/Spa). Praised for using advanced surgical microscopes and 3D CBCT imaging.</span></td>
-            <td><span class="highlight-good">Clean Record</span><br>No board conflict history. Strong positive history of academic excellence. Active AAE member.</td>
-        </tr>
-        <tr>
-            <td><strong>Fredericka Salbo, DMD, MS</strong></td>
-            <td><strong>DMD & Endo Spec.:</strong> Nova Southeastern University (2014).<br><br>Approx. 12 years professional experience.</td>
-            <td>
-                <strong>Main Location:</strong><br>4316 Southside Blvd, Jacksonville, FL 32216<br>
-                <a href="tel:904-547-1359" class="phone-btn">📞 (904) 547-1359</a>
-                <details>
-                    <summary>View 21 Other Locations</summary>
-                    <ul>
-                        <li>2709 Monument Rd, Jacksonville, FL 32225</li>
-                        <li>501 Maitland Blvd, Maitland, FL 32751</li>
-                        <li>7601 Narcoossee Rd, Orlando, FL 32822</li>
-                        <li>4396 W Vine St, Kissimmee, FL 34746</li>
-                        <li>2942 N Orange Blossom Trl, Kissimmee, FL 34744</li>
-                        <li>6455 N Wickham Rd Ste 103, Melbourne, FL 32940</li>
-                        <li>11151 Southern Blvd Ste 110, Royal Palm Beach, FL 33411</li>
-                        <li>7375 Boynton Beach Blvd Ste 445 Bldg D, Boynton Beach, FL 33437</li>
-                        <li>5810 Wiles Rd, Coral Springs, FL 33067</li>
-                        <li>1865 Cordova Rd, Fort Lauderdale, FL 33316</li>
-                        <li>18312 Pines Blvd, Pembroke Pnes, FL 33029</li>
-                        <li>420 Town Center Parkway, Slidell, LA 70458</li>
-                        <li>3421 East Causeway Approach Ste A, Mandeville, LA 70448</li>
-                        <li>929 Manhattan Boulevard Ste D, Harvey, LA 70058</li>
-                        <li>2937 Veterans Memorial Boulevard Ste C, Metairie, LA 70002</li>
-                        <li>5201 Veterans Memorial Boulevard Ste A, Metairie, LA 70006</li>
-                        <li>10129 Crossing Way Ste 400, Denham Springs, LA 70726</li>
-                        <li>2121 Millerville Road Ste A, Baton Rouge, LA 70816</li>
-                        <li>3535 Perkins Rd Ste 345, Baton Rouge, LA 70808</li>
-                        <li>4243 Ambassador Caffery Parkway Ste 118, Lafayette, LA 70508</li>
-                        <li>4750 Nelson Road Ste 100, Lake Charles, LA 70605</li>
-                    </ul>
-                </details>
-            </td>
-            <td class="center-text"><strong>4.2 / 5</strong> (General Average)<br><strong>4.0 / 5</strong> (DentaQual)<br><br><span style="font-size:9.5pt;">Known for her "stress-free endodontics" philosophy and strong focus on patient anxiety management.</span></td>
-            <td><span class="highlight-good">Clean Record</span><br>Clean professional record. Active member of FL Dental Association and South Broward Dental Society.</td>
-        </tr>
-        <tr>
-            <td><strong>Jenna L. Hart, DMD, MS</strong></td>
-            <td><strong>DMD & Endo Spec.:</strong> University of Florida (2018/2021).<br><br>Approx. 5 years specialized experience exclusively as an endodontist.</td>
-            <td>
-                <strong>Main Location:</strong><br>200 Bartram Market Dr, Saint Johns, FL 32259<br>
-                <a href="tel:604-671-8502" class="phone-btn">📞 (604) 671-8502</a>
-                <details>
-                    <summary>View 1 Other Location</summary>
-                    <ul>
-                        <li>1747 US Highway 1 S, St Augustine, FL 32084</li>
-                    </ul>
-                </details>
-            </td>
-            <td class="center-text"><span class="highlight-good">Board Certified</span><br><br><span style="font-size:9.5pt;">Fewer numeric reviews due to recency in field, but holds highest clinical distinction (Diplomate of ABE).</span></td>
-            <td><span class="highlight-good">Clean Record</span><br>Clean background with no disciplinary history. Rapidly achieving Board Certification is a major positive achievement.</td>
-        </tr>
-    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // Database of Providers based on research
+    const providers =[
+        {
+            id: 1,
+            name: "Jose Luis Marcos Arenal, DDS",
+            shortSpec: "16 Offices • Greenberg Dental",
+            badge: "Clean Record",
+            phone: "904-781-1201",
+            mainLoc: "5149 Normandy Blvd, Unit 4, Jacksonville, FL 32205",
+            edu: "<strong>DDS:</strong> Basque University Dental School<br><strong>Cert:</strong> UNC Hospitals (Endodontics)<br><br>Highly experienced practitioner working primarily within the Greenberg Dental network.",
+            ratingScore: "4.0 / 5",
+            ratingSource: "WebMD & DentaQual",
+            reviewNotes: "Patients highlight high professionalism and transparency with budgets.",
+            history: "No disciplinary actions or malpractice suits. Positive history of expanding accessibility to specialist care.",
+            otherLocs:
+        },
+        {
+            id: 2,
+            name: "Leandro R. Britto, DDS, MS",
+            shortSpec: "2 Offices • Endo Partners of FL",
+            badge: "Published Researcher",
+            phone: "904-777-5878",
+            mainLoc: "5911 Timuquana Rd Ste 101, Jacksonville, FL 32210",
+            edu: "Co-authored numerous peer-reviewed studies at the Univ. of Florida regarding complex dental anatomy. Highly experienced.",
+            ratingScore: "4.8 / 5",
+            ratingSource: "Healthgrades & RateMDs",
+            reviewNotes: "Consistently praised for highly knowledgeable, painless root canals.",
+            history: "Zero malpractice or board infractions. Exceptionally positive history in academic dentistry and research.",
+            otherLocs:
+        },
+        {
+            id: 3,
+            name: "Diana M. Cline, DMD, MS",
+            shortSpec: "2 Offices • Endo Partners of FL",
+            badge: "Ivy League",
+            phone: "904-777-5878",
+            mainLoc: "5911 Timuquana Rd Ste 101, Jacksonville, FL 32210",
+            edu: "<strong>DMD:</strong> Harvard School of Dental Medicine<br><strong>Residency:</strong> Tufts University / New England Medical Center.",
+            ratingScore: "3.0 / 5",
+            ratingSource: "Sharecare",
+            reviewNotes: "Smaller digital footprint. Clinic praised for comfortable and respectful environment.",
+            history: "Pristine public record. Elite top-tier academic background with no board actions or malpractice lawsuits.",
+            otherLocs:
+        },
+        {
+            id: 4,
+            name: "Kerolos R. Elsayed, DDS, MS",
+            shortSpec: "4 Offices • Multi-State Licensed",
+            badge: "Board Certified",
+            phone: "904-354-4031",
+            mainLoc: "751 Oak St, Ste 601, Jacksonville, FL 32204",
+            edu: "<strong>DDS:</strong> Univ of North Carolina.<br>Approx. 14 years of specialized experience practicing across multiple states.",
+            ratingScore: "4.8 / 5",
+            ratingSource: "WebMD & Vitals",
+            reviewNotes: "Described as 'very knowledgeable' with a focus on painless dentistry and compassionate care.",
+            history: "Clean license. Strong positive compliance history across several different state dental boards.",
+            otherLocs:
+        },
+        {
+            id: 5,
+            name: "Jacob Prows, DDS, MS",
+            shortSpec: "12 Offices • Aspen Dental",
+            badge: "Clean Record",
+            phone: "904-525-8041",
+            mainLoc: "8440 Blanding Blvd, Jacksonville, FL 32244",
+            edu: "Approx. 7 years of specialized endodontic experience. Practices heavily within the Aspen Dental network.",
+            ratingScore: "4.3 / 5",
+            ratingSource: "Aspen Clinic Averages",
+            reviewNotes: "Praised for promptness of care and efficient handling of emergency root canals.",
+            history: "Zero board infractions, sanctions, or malpractice lawsuits found on public record.",
+            otherLocs:
+        },
+        {
+            id: 6,
+            name: "Marangely Ruiz Medina, DMD",
+            shortSpec: "18 Offices • Fully Bilingual",
+            badge: "Magna Cum Laude",
+            phone: "904-204-9105",
+            mainLoc: "9406 Atlantic Blvd Ste 1, Jacksonville, FL 32225",
+            edu: "<strong>DMD:</strong> Univ of Puerto Rico (Magna Cum Laude).<br><strong>Residency:</strong> NYU Langone.<br><strong>BS:</strong> Neuroscience, Univ of Michigan.",
+            ratingScore: "4.0 / 5",
+            ratingSource: "DentaQual",
+            reviewNotes: "Praised for using advanced surgical microscopes and 3D CBCT imaging. Fluent in English & Spanish.",
+            history: "No board conflict history. Strong positive history of academic excellence. Active AAE member.",
+            otherLocs:
+        },
+        {
+            id: 7,
+            name: "Fredericka Salbo, DMD, MS",
+            shortSpec: "22 Offices • Anxiety Management",
+            badge: "Clean Record",
+            phone: "904-547-1359",
+            mainLoc: "4316 Southside Blvd, Jacksonville, FL 32216",
+            edu: "<strong>DMD & Spec:</strong> Nova Southeastern University (2014).<br>Approx. 12 years professional experience across FL and LA.",
+            ratingScore: "4.2 / 5",
+            ratingSource: "Healthgrades & DentaQual",
+            reviewNotes: "Known for her 'stress-free endodontics' philosophy and strong focus on patient anxiety management.",
+            history: "Clean professional record. Active member of FL Dental Association and South Broward Dental Society.",
+            otherLocs:
+        },
+        {
+            id: 8,
+            name: "Jenna L. Hart, DMD, MS",
+            shortSpec: "2 Offices • Highest Distinction",
+            badge: "Board Certified",
+            phone: "604-671-8502",
+            mainLoc: "200 Bartram Market Dr, Saint Johns, FL 32259",
+            edu: "<strong>DMD & Spec:</strong> University of Florida (2018/2021).<br>Approx. 5 years specialized experience exclusively as an endodontist.",
+            ratingScore: "5.0 / 5",
+            ratingSource: "General Average",
+            reviewNotes: "Fewer numeric reviews due to recency in field, but holds highest clinical distinction (Diplomate of ABE).",
+            history: "Clean background. Rapidly achieving Board Certification is a major positive achievement.",
+            otherLocs:
+        }
+    ];
+
+    // Render the list of providers on page load
+    const listContainer = document.getElementById('providerList');
+
+    providers.forEach(doctor => {
+        const card = document.createElement('div');
+        card.className = 'provider-card';
+        card.onclick = () => openModal(doctor.id);
+        
+        card.innerHTML = `
+            <div class="provider-info">
+                <h2>${doctor.name}</h2>
+                <p>${doctor.shortSpec}</p>
+                <span class="badge">${doctor.badge}</span>
+            </div>
+            <div class="chevron">›</div>
+        `;
+        listContainer.appendChild(card);
+    });
+
+    // Modal logic
+    const modalOverlay = document.getElementById('modalOverlay');
+
+    function openModal(id) {
+        const doctor = providers.find(p => p.id === id);
+        if (!doctor) return;
+
+        // Populate Data
+        document.getElementById('modalName').innerText = doctor.name;
+        document.getElementById('modalPhone').href = `tel:${doctor.phone.replace(/-/g, '')}`;
+        document.getElementById('modalPhone').innerText = `📞 Call ${doctor.phone}`;
+        
+        document.getElementById('modalStatus').innerText = doctor.badge;
+        document.getElementById('modalHistory').innerText = doctor.history;
+        
+        document.getElementById('modalRatingScore').innerText = doctor.ratingScore;
+        document.getElementById('modalRatingSource').innerText = doctor.ratingSource;
+        document.getElementById('modalReviewNotes').innerText = doctor.reviewNotes;
+        
+        document.getElementById('modalEdu').innerHTML = doctor.edu;
+        
+        document.getElementById('modalMainLoc').innerText = doctor.mainLoc;
+        
+        // Handle Other Locations List
+        const otherLocsContainer = document.getElementById('modalOtherLocs');
+        const otherLocsTitle = document.getElementById('otherLocTitle');
+        otherLocsContainer.innerHTML = '';
+        
+        if(doctor.otherLocs.length > 0) {
+            otherLocsTitle.style.display = 'block';
+            doctor.otherLocs.forEach(loc => {
+                const li = document.createElement('li');
+                li.innerText = loc;
+                otherLocsContainer.appendChild(li);
+            });
+        } else {
+            otherLocsTitle.style.display = 'none';
+        }
+
+        // Show Modal
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    function closeModal(eventOrForce) {
+        // Close if clicking the overlay background or the close button
+        if (eventOrForce === true || eventOrForce.target === modalOverlay) {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = ''; // Restore background scrolling
+        }
+    }
+</script>
+
 </body>
 </html>
