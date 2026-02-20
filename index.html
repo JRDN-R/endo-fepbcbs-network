@@ -107,6 +107,17 @@
             margin-top: 8px;
         }
 
+        .rating-pill {
+            background-color: var(--surface-elevated);
+            color: var(--accent-blue);
+            font-weight: 700;
+            font-size: 13px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            margin-left: 8px;
+            display: inline-block;
+        }
+
         .chevron {
             color: var(--text-secondary);
             font-size: 20px;
@@ -328,36 +339,22 @@
 </div>
 
 <script>
-    // Database of Providers with all fields correctly populated
+    // Database of Providers - SORTED BY RATING (Highest to Lowest)
     const providers = [
         {
-            id: 1,
-            name: "Jose Luis Marcos Arenal, DDS",
-            shortSpec: "16 Offices • Greenberg Dental",
-            badge: "Clean Record",
-            phone: "904-781-1201",
-            mainLoc: "5149 Normandy Blvd, Unit 4, Jacksonville, FL 32205",
-            edu: "<strong>DDS:</strong> Basque University Dental School<br><strong>Cert:</strong> UNC Hospitals (Endodontics)<br><br>Highly experienced practitioner working primarily within the Greenberg Dental network.",
-            ratingScore: "4.0 / 5",
-            ratingSource: "WebMD & DentaQual",
-            reviewNotes: "Patients highlight high professionalism and transparency with budgets.",
-            history: "No disciplinary actions or malpractice suits. Positive history of expanding accessibility to specialist care.",
+            id: 8,
+            name: "Jenna L. Hart, DMD, MS",
+            shortSpec: "2 Offices • Highest Distinction",
+            badge: "Board Certified",
+            phone: "604-671-8502",
+            mainLoc: "200 Bartram Market Dr, Saint Johns, FL 32259",
+            edu: "<strong>DMD & Spec:</strong> University of Florida (2018/2021).<br>Approx. 5 years specialized experience exclusively as an endodontist.",
+            ratingScore: "5.0 / 5",
+            ratingSource: "General Average",
+            reviewNotes: "Fewer numeric reviews due to recency in field, but holds highest clinical distinction (Diplomate of ABE).",
+            history: "Clean background. Rapidly achieving Board Certification is a major positive achievement.",
             otherLocs: [
-                "5116 Blanding Blvd, Jacksonville, FL 32210",
-                "1562 Wells Rd Ste 16, Orange Park, FL 32073",
-                "1036 Dunn Ave Ste 42, Jacksonville, FL 32218",
-                "5937 University Blvd W, Jacksonville, FL 32216",
-                "10601 San Jose Blvd Ste 117, Jacksonville, FL 32257",
-                "620 Commerce Center Dr Unit 155, Jacksonville, FL 32225",
-                "9978 Old Baymeadows Rd Ste 1, Jacksonville, FL 32256",
-                "1985 Eastwest Pkwy, Fleming Island, FL 32003",
-                "540 State Road 13 N Ste 101, Fruit Cove, FL 32259",
-                "13820 Old Saint Augustine Rd Ste 105, Jacksonville, FL 32258",
-                "14444 Beach Blvd Ste 2, Jacksonville, FL 32250",
-                "1023 Atlantic Blvd, Atlantic Beach, FL 32233",
-                "3727 N Goldenrod Rd Ste 108, Winter Park, FL 32792",
-                "4732 S Kirkman Rd, Orlando, FL 32811",
-                "1379 E Vine St, Kissimmee, FL 34744"
+                "1747 US Highway 1 S, St Augustine, FL 32084"
             ]
         },
         {
@@ -372,22 +369,6 @@
             ratingSource: "Healthgrades & RateMDs",
             reviewNotes: "Consistently praised for highly knowledgeable, painless root canals.",
             history: "Zero malpractice or board infractions. Exceptionally positive history in academic dentistry and research.",
-            otherLocs: [
-                "960185 Gateway Blvd Ste 204, Fernandina Beach, FL 32034"
-            ]
-        },
-        {
-            id: 3,
-            name: "Diana M. Cline, DMD, MS",
-            shortSpec: "2 Offices • Endo Partners of FL",
-            badge: "Ivy League",
-            phone: "904-777-5878",
-            mainLoc: "5911 Timuquana Rd Ste 101, Jacksonville, FL 32210",
-            edu: "<strong>DMD:</strong> Harvard School of Dental Medicine<br><strong>Residency:</strong> Tufts University / New England Medical Center.",
-            ratingScore: "3.0 / 5",
-            ratingSource: "Sharecare",
-            reviewNotes: "Smaller digital footprint. Clinic praised for comfortable and respectful environment.",
-            history: "Pristine public record. Elite top-tier academic background with no board actions or malpractice lawsuits.",
             otherLocs: [
                 "960185 Gateway Blvd Ste 204, Fernandina Beach, FL 32034"
             ]
@@ -437,38 +418,6 @@
             ]
         },
         {
-            id: 6,
-            name: "Marangely Ruiz Medina, DMD",
-            shortSpec: "18 Offices • Fully Bilingual",
-            badge: "Magna Cum Laude",
-            phone: "904-204-9105",
-            mainLoc: "9406 Atlantic Blvd Ste 1, Jacksonville, FL 32225",
-            edu: "<strong>DMD:</strong> Univ of Puerto Rico (Magna Cum Laude).<br><strong>Residency:</strong> NYU Langone.<br><strong>BS:</strong> Neuroscience, Univ of Michigan.",
-            ratingScore: "4.0 / 5",
-            ratingSource: "DentaQual",
-            reviewNotes: "Praised for using advanced surgical microscopes and 3D CBCT imaging. Fluent in English & Spanish.",
-            history: "No board conflict history. Strong positive history of academic excellence. Active AAE member.",
-            otherLocs: [
-                "4316 Southside Blvd, Jacksonville, FL 32216",
-                "2709 Monument Rd, Jacksonville, FL 32225",
-                "911 Beville Rd Ste 2, South Daytona, FL 32119",
-                "17365 US Highway 441, Mount Dora, FL 32757",
-                "3779 Lake Emma Rd, Lake Mary, FL 32746",
-                "5908 Red Bug Lake Rd, Winter Springs, FL 32708",
-                "1973 Aloma Ave, Winter Park, FL 32792",
-                "11050 W Colonial Dr Ste 30, Ocoee, FL 34761",
-                "4014 Winter Garden Vineland Rd Ste B, Winter Garden, FL 34787",
-                "3123 S Orange Ave Ste 107, Orlando, FL 32806",
-                "12711 Narcoossee Rd Ste 100 Bldg B, Orlando, FL 32832",
-                "2907 Vineland Rd, Kissimmee, FL 34746",
-                "4396 W Vine St, Kissimmee, FL 34746",
-                "2942 N Orange Blossom Trl, Kissimmee, FL 34744",
-                "6455 N Wickham Rd Ste 103, Melbourne, FL 32940",
-                "1820 58Th Ave Ste 101, Vero Beach, FL 32966",
-                "5966 S Dixie Hwy Ste 312, South Miami, FL 33143"
-            ]
-        },
-        {
             id: 7,
             name: "Fredericka Salbo, DMD, MS",
             shortSpec: "22 Offices • Anxiety Management",
@@ -505,19 +454,81 @@
             ]
         },
         {
-            id: 8,
-            name: "Jenna L. Hart, DMD, MS",
-            shortSpec: "2 Offices • Highest Distinction",
-            badge: "Board Certified",
-            phone: "604-671-8502",
-            mainLoc: "200 Bartram Market Dr, Saint Johns, FL 32259",
-            edu: "<strong>DMD & Spec:</strong> University of Florida (2018/2021).<br>Approx. 5 years specialized experience exclusively as an endodontist.",
-            ratingScore: "5.0 / 5",
-            ratingSource: "General Average",
-            reviewNotes: "Fewer numeric reviews due to recency in field, but holds highest clinical distinction (Diplomate of ABE).",
-            history: "Clean background. Rapidly achieving Board Certification is a major positive achievement.",
+            id: 1,
+            name: "Jose Luis Marcos Arenal, DDS",
+            shortSpec: "16 Offices • Greenberg Dental",
+            badge: "Clean Record",
+            phone: "904-781-1201",
+            mainLoc: "5149 Normandy Blvd, Unit 4, Jacksonville, FL 32205",
+            edu: "<strong>DDS:</strong> Basque University Dental School<br><strong>Cert:</strong> UNC Hospitals (Endodontics)<br><br>Highly experienced practitioner working primarily within the Greenberg Dental network.",
+            ratingScore: "4.0 / 5",
+            ratingSource: "WebMD & DentaQual",
+            reviewNotes: "Patients highlight high professionalism and transparency with budgets.",
+            history: "No disciplinary actions or malpractice suits. Positive history of expanding accessibility to specialist care.",
             otherLocs: [
-                "1747 US Highway 1 S, St Augustine, FL 32084"
+                "5116 Blanding Blvd, Jacksonville, FL 32210",
+                "1562 Wells Rd Ste 16, Orange Park, FL 32073",
+                "1036 Dunn Ave Ste 42, Jacksonville, FL 32218",
+                "5937 University Blvd W, Jacksonville, FL 32216",
+                "10601 San Jose Blvd Ste 117, Jacksonville, FL 32257",
+                "620 Commerce Center Dr Unit 155, Jacksonville, FL 32225",
+                "9978 Old Baymeadows Rd Ste 1, Jacksonville, FL 32256",
+                "1985 Eastwest Pkwy, Fleming Island, FL 32003",
+                "540 State Road 13 N Ste 101, Fruit Cove, FL 32259",
+                "13820 Old Saint Augustine Rd Ste 105, Jacksonville, FL 32258",
+                "14444 Beach Blvd Ste 2, Jacksonville, FL 32250",
+                "1023 Atlantic Blvd, Atlantic Beach, FL 32233",
+                "3727 N Goldenrod Rd Ste 108, Winter Park, FL 32792",
+                "4732 S Kirkman Rd, Orlando, FL 32811",
+                "1379 E Vine St, Kissimmee, FL 34744"
+            ]
+        },
+        {
+            id: 6,
+            name: "Marangely Ruiz Medina, DMD",
+            shortSpec: "18 Offices • Fully Bilingual",
+            badge: "Magna Cum Laude",
+            phone: "904-204-9105",
+            mainLoc: "9406 Atlantic Blvd Ste 1, Jacksonville, FL 32225",
+            edu: "<strong>DMD:</strong> Univ of Puerto Rico (Magna Cum Laude).<br><strong>Residency:</strong> NYU Langone.<br><strong>BS:</strong> Neuroscience, Univ of Michigan.",
+            ratingScore: "4.0 / 5",
+            ratingSource: "DentaQual",
+            reviewNotes: "Praised for using advanced surgical microscopes and 3D CBCT imaging. Fluent in English & Spanish.",
+            history: "No board conflict history. Strong positive history of academic excellence. Active AAE member.",
+            otherLocs: [
+                "4316 Southside Blvd, Jacksonville, FL 32216",
+                "2709 Monument Rd, Jacksonville, FL 32225",
+                "911 Beville Rd Ste 2, South Daytona, FL 32119",
+                "17365 US Highway 441, Mount Dora, FL 32757",
+                "3779 Lake Emma Rd, Lake Mary, FL 32746",
+                "5908 Red Bug Lake Rd, Winter Springs, FL 32708",
+                "1973 Aloma Ave, Winter Park, FL 32792",
+                "11050 W Colonial Dr Ste 30, Ocoee, FL 34761",
+                "4014 Winter Garden Vineland Rd Ste B, Winter Garden, FL 34787",
+                "3123 S Orange Ave Ste 107, Orlando, FL 32806",
+                "12711 Narcoossee Rd Ste 100 Bldg B, Orlando, FL 32832",
+                "2907 Vineland Rd, Kissimmee, FL 34746",
+                "4396 W Vine St, Kissimmee, FL 34746",
+                "2942 N Orange Blossom Trl, Kissimmee, FL 34744",
+                "6455 N Wickham Rd Ste 103, Melbourne, FL 32940",
+                "1820 58Th Ave Ste 101, Vero Beach, FL 32966",
+                "5966 S Dixie Hwy Ste 312, South Miami, FL 33143"
+            ]
+        },
+        {
+            id: 3,
+            name: "Diana M. Cline, DMD, MS",
+            shortSpec: "2 Offices • Endo Partners of FL",
+            badge: "Ivy League",
+            phone: "904-777-5878",
+            mainLoc: "5911 Timuquana Rd Ste 101, Jacksonville, FL 32210",
+            edu: "<strong>DMD:</strong> Harvard School of Dental Medicine<br><strong>Residency:</strong> Tufts University / New England Medical Center.",
+            ratingScore: "3.0 / 5",
+            ratingSource: "Sharecare",
+            reviewNotes: "Smaller digital footprint. Clinic praised for comfortable and respectful environment.",
+            history: "Pristine public record. Elite top-tier academic background with no board actions or malpractice lawsuits.",
+            otherLocs: [
+                "960185 Gateway Blvd Ste 204, Fernandina Beach, FL 32034"
             ]
         }
     ];
@@ -534,7 +545,10 @@
             <div class="provider-info">
                 <h2>${doctor.name}</h2>
                 <p>${doctor.shortSpec}</p>
-                <span class="badge">${doctor.badge}</span>
+                <div style="display:flex; align-items:center; margin-top:8px;">
+                    <span class="badge">${doctor.badge}</span>
+                    <span class="rating-pill">★ ${doctor.ratingScore.split(' ')[0]}</span>
+                </div>
             </div>
             <div class="chevron">›</div>
         `;
